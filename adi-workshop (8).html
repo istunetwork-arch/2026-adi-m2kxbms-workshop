@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligent Sensing Workshop｜智慧感測與能源系統工作坊</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg2: #0f1520;
+    --surface: #131c2e;
+    --surface2: #1a2540;
+    --accent: #00d4ff;
+    --accent2: #0066cc;
+    --accent3: #ff6b35;
+    --text: #e8f0ff;
+    --text-muted: #7a90b8;
+    --border: rgba(0, 212, 255, 0.15);
+    --glow: rgba(0, 212, 255, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 0 40px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(0, 102, 204, 0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+      linear-gradient(180deg, #0a0e17 0%, #0d1422 100%);
+  }
+
+  /* Circuit pattern SVG background */
+  .circuit-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.5'%3E%3Cpath d='M10 10 h20 v10 h10 v-10 h20'/%3E%3Cpath d='M70 10 h20 v30 h-10 v10 h10 v30 h-20'/%3E%3Cpath d='M10 40 h30 v20 h-10 v10 h30 v-30 h10'/%3E%3Cpath d='M10 80 h20 v-20 h40 v20 h20'/%3E%3Ccircle cx='30' cy='10' r='2' fill='%2300d4ff'/%3E%3Ccircle cx='60' cy='10' r='2' fill='%2300d4ff'/%3E%3Ccircle cx='40' cy='40' r='2' fill='%2300d4ff'/%3E%3Ccircle cx='70' cy='50' r='2' fill='%2300d4ff'/%3E%3Ccircle cx='30' cy='80' r='2' fill='%2300d4ff'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 100px 100px;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 0;
+    position: relative;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-adi {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .logo-adi span {
+    display: inline-block;
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    margin-right: 12px;
+  }
+
+  .tag-line {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  .topbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-logo-box {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    letter-spacing: 3px;
+  }
+
+  .topbar-logo-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .topbar-nav-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 2px;
+    border: 1px solid var(--accent);
+    padding: 6px 16px;
+    transition: all 0.2s;
+  }
+
+  .topbar-nav-link:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .topbar-nav-divider {
+    color: var(--border);
+    font-size: 14px;
+  }
+
+  .topbar-nav-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 48px 0 60px;
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+  }
+
+  .eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 110px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  h1 .accent-word {
+    color: var(--accent);
+    display: block;
+  }
+
+  .subtitle-zh {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    letter-spacing: 4px;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.9;
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+    margin-bottom: 48px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .meta-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .cta-btn {
+    display: inline-block;
+    margin-top: 48px;
+    padding: 16px 40px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: -1;
+  }
+
+  .cta-btn:hover {
+    color: var(--bg);
+  }
+
+  .cta-btn:hover::before {
+    transform: translateX(0);
+  }
+
+  /* Animated oscilloscope SVG */
+  .hero-visual {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45%;
+    opacity: 0.15;
+    z-index: 5;
+  }
+
+  .wave-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawWave 3s ease forwards;
+  }
+
+  @keyframes drawWave {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .pulse-dot {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; r: 4; }
+    50% { opacity: 0.3; r: 8; }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 100px 40px;
+    position: relative;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 3vw, 36px);
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+    color: var(--text);
+  }
+
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 3vw, 36px);
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+    color: var(--text);
+  }
+
+  /* ── INTRO SECTION ── */
+  .intro {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .intro-text p {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.9;
+  }
+
+  .intro-text p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Industry icons visual */
+  .industry-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .industry-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .industry-card:hover {
+    border-color: var(--accent);
+  }
+
+  .industry-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.3s;
+  }
+
+  .industry-card:hover::after { height: 100%; }
+
+  .industry-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .industry-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .industry-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* ── UNITS ── */
+  .units { background: var(--bg); }
+
+  .units-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 8px;
+  }
+
+  .unit-card {
+    background: var(--surface);
+    padding: 48px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .unit-card:hover { background: var(--surface2); }
+
+  .unit-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(0, 212, 255, 0.06);
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .unit-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .unit-tag::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .unit-icon-svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+  }
+
+  .unit-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .unit-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+
+  /* ── SCHEDULE ── */
+  .schedule { background: var(--bg2); }
+
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    align-items: start;
+    transition: background 0.2s;
+  }
+
+  .timeline-item:last-child { border-bottom: none; }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -44px;
+    top: 36px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .timeline-time {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    padding-top: 2px;
+  }
+
+  .timeline-content-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .timeline-content-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── OUTCOMES ── */
+  .outcomes { background: var(--bg); }
+
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+
+  .outcome-item {
+    background: var(--surface);
+    padding: 36px 40px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    transition: background 0.3s;
+  }
+
+  .outcome-item:hover { background: var(--surface2); }
+
+  .outcome-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .outcome-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.9;
+    padding-top: 8px;
+  }
+
+  /* ── NOTICE ── */
+  .notice { background: var(--bg2); }
+
+  .notice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .notice-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 36px;
+  }
+
+  .notice-block-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .notice-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .notice-list li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.8;
+  }
+
+  .notice-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+  }
+
+  .notice-list a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,212,255,0.3);
+  }
+
+  /* ── ORGANIZERS ── */
+  .organizers { background: var(--bg); }
+
+  .org-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .org-card {
+    background: var(--surface);
+    padding: 36px 28px;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .org-card:hover { background: var(--surface2); }
+
+  .org-abbr {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .org-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .org-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-copyright {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── INFO BAR ── */
+  .info-bar {
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+  }
+
+  .info-bar-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    section { padding: 60px 24px; }
+    .hero { padding: 0 24px; }
+    .intro-grid { grid-template-columns: 1fr; gap: 48px; }
+    .units-grid { grid-template-columns: 1fr; }
+    .outcomes-grid { grid-template-columns: 1fr; }
+    .notice-grid { grid-template-columns: 1fr; }
+    .org-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-visual { display: none; }
+    .info-bar-inner { gap: 32px; }
+    .footer-inner { flex-direction: column; }
+    .footer-contact { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="circuit-bg"></div>
+
+  <!-- Oscilloscope SVG decoration -->
+  <svg class="hero-visual" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="20" width="560" height="360" rx="4" stroke="#00d4ff" stroke-width="1"/>
+    <rect x="20" y="20" width="560" height="40" rx="4" fill="rgba(0,212,255,0.05)" stroke="#00d4ff" stroke-width="1"/>
+    <text x="40" y="46" fill="#00d4ff" font-family="monospace" font-size="14">ADALM2000  CH1  CH2</text>
+    <!-- Grid lines -->
+    <line x1="20" y1="220" x2="580" y2="220" stroke="#00d4ff" stroke-width="0.3" stroke-dasharray="4,4"/>
+    <line x1="20" y1="140" x2="580" y2="140" stroke="#00d4ff" stroke-width="0.3" stroke-dasharray="4,4"/>
+    <line x1="20" y1="300" x2="580" y2="300" stroke="#00d4ff" stroke-width="0.3" stroke-dasharray="4,4"/>
+    <line x1="160" y1="60" x2="160" y2="380" stroke="#00d4ff" stroke-width="0.3" stroke-dasharray="4,4"/>
+    <line x1="300" y1="60" x2="300" y2="380" stroke="#00d4ff" stroke-width="0.3" stroke-dasharray="4,4"/>
+    <line x1="440" y1="60" x2="440" y2="380" stroke="#00d4ff" stroke-width="0.3" stroke-dasharray="4,4"/>
+    <!-- Waveform CH1 - Buck converter output -->
+    <polyline class="wave-path" points="20,220 60,220 60,120 100,120 100,220 140,220 140,120 180,120 180,220 220,220 220,120 260,120 260,220 300,220 300,120 340,120 340,220 380,220 380,120 420,120 420,220 460,220 460,120 500,120 500,220 540,220 540,120 580,120" stroke="#00d4ff" stroke-width="2" fill="none"/>
+    <!-- Waveform CH2 - Smooth output -->
+    <path class="wave-path" d="M20,185 C60,185 80,160 100,160 C140,160 160,185 200,185 C240,185 260,160 300,160 C340,160 360,185 400,185 C440,185 460,160 500,160 C540,160 560,185 580,185" stroke="#ff6b35" stroke-width="2" fill="none" style="animation-delay: 0.5s"/>
+    <!-- Cursor dot -->
+    <circle class="pulse-dot" cx="300" cy="160" r="4" fill="#ff6b35"/>
+    <!-- Labels -->
+    <text x="30" y="110" fill="#00d4ff" font-family="monospace" font-size="10">CH1  5V/div</text>
+    <text x="30" y="175" fill="#ff6b35" font-family="monospace" font-size="10">CH2  Vout</text>
+  </svg>
+
+  <div class="topbar">
+    <div class="topbar-logo">
+      <span class="topbar-logo-text">Analog Devices, Inc.</span>
+    </div>
+    <div class="topbar-nav">
+      <a href="#register" class="topbar-nav-link">立即報名</a>
+      <span class="topbar-nav-divider">|</span>
+      <span class="topbar-nav-date">2026.07.07 · <a href="https://maps.app.goo.gl/kJPepiWGDyd39jft8?g_st=ic" target="_blank" style="color:var(--text-muted);text-decoration:none;border-bottom:1px solid rgba(122,144,184,0.4);">digiblock C（台北）</a></span>
+    </div>
+  </div>
+
+  <div class="hero-content fade-in">
+        <h1>
+      Intelligent
+      <span class="accent-word">Sensing</span>
+      Workshop
+    </h1>
+    <div class="subtitle-zh">智慧感測與能源系統工作坊</div>
+    <p class="hero-desc">
+      電動車、AI 伺服器、智慧製造——讓能源被精準地轉換、監控與保護，是這些產業底層共同依賴的工程能力。這場工作坊帶你從訊號出發，一路理解電源管理、電池監控到安全驗證的完整脈絡。
+    </p>
+
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Date</span>
+        <span class="meta-value">2026 年 7 月 7 日（二）</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Time</span>
+        <span class="meta-value">13:00 – 17:00</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Venue</span>
+        <span class="meta-value"><a href="https://maps.app.goo.gl/kJPepiWGDyd39jft8?g_st=ic" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px solid rgba(232,240,255,0.3);">digiblock C數位創新基地</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Capacity</span>
+        <span class="meta-value">限額 45 位・免費</span>
+      </div>
+    </div>
+
+    <a href="#register" class="cta-btn">立即報名 →</a>
+  </div>
+</section>
+
+<!-- ── INFO BAR ── -->
+<div class="info-bar">
+  <div class="info-bar-inner">
+    <div class="meta-item">
+      <span class="meta-label">主辦單位</span>
+      <span class="meta-value" style="font-size:14px">Analog Devices, Inc.(ADI) · Macnica Anstek Inc.(安馳科技) · iStuNet(輔宏) · IET</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">適合對象</span>
+      <span class="meta-value" style="font-size:14px">電機 / 電子 / 資工相關科系學生 · 電動賽車隊</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">費用</span>
+      <span class="meta-value" style="font-size:14px; color: var(--accent)">免費參加</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── INTRO ── -->
+<section class="intro">
+  <div class="section-inner">
+    <div class="intro-grid">
+      <div class="intro-text fade-in">
+        <div class="section-label">About</div>
+        <h3>為什麼舉辦?</h3>
+        <p>
+          電源設計、電池管理、訊號感測與安全驗證，不再是少數專業工程師的領域，而是<strong>硬體開發者愈來愈難以迴避的核心技術</strong>——而學校課堂裡幾乎沒有機會完整接觸。
+        </p>
+        <p>
+          這場工作坊以賽車工程為實作背景——在容錯空間極低、每個設計決策都直接影響性能與安全的場景下，帶你理解這套技術的完整脈絡。
+          你學到的方法，適用的不只是賽道，而是所有對可靠性有要求的系統開發場景。
+        </p>
+      </div>
+
+      <div class="industry-visual fade-in">
+        <div class="industry-card">
+          <span class="industry-icon">⚡</span>
+          <div class="industry-name">電動車產業</div>
+          <div class="industry-sub">EV · BMS · Power Electronics</div>
+        </div>
+        <div class="industry-card">
+          <span class="industry-icon">🖥️</span>
+          <div class="industry-name">AI 伺服器</div>
+          <div class="industry-sub">Data Center · Power Management</div>
+        </div>
+        <div class="industry-card">
+          <span class="industry-icon">🏎️</span>
+          <div class="industry-name">電動賽車</div>
+          <div class="industry-sub">FSAE · Safety · Integration</div>
+        </div>
+        <div class="industry-card">
+          <span class="industry-icon">🏭</span>
+          <div class="industry-name">智慧製造</div>
+          <div class="industry-sub">Industrial · Sensing · Control</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── UNITS ── -->
+<section class="units">
+  <div class="section-inner">
+    <div class="section-label">Curriculum</div>
+    <h3>三個單元，一套完整脈絡</h3>
+
+    <div class="units-grid">
+
+      <!-- Unit 1 -->
+      <div class="unit-card fade-in">
+        <div class="unit-number">01</div>
+        <div class="unit-tag">Unit 01</div>
+        <!-- Power waveform SVG icon -->
+        <svg class="unit-icon-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="46" height="46" rx="2" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+          <polyline points="4,24 12,24 12,12 20,12 20,24 28,24 28,12 36,12 36,24 44,24" stroke="#00d4ff" stroke-width="2" fill="none"/>
+          <line x1="1" y1="36" x2="47" y2="36" stroke="rgba(0,212,255,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+        </svg>
+        <div class="unit-title">電源設計與<br>穩定度驗證</div>
+        <p class="unit-desc">從電壓轉換電路的核心概念出發，說明電源是如何被設計、被量測、被驗證的。介紹如何預測電源在負載突然變化時是否會震盪或崩潰——這是從「電路能動」升級到「電路在任何條件下都穩定」的關鍵思維。</p>
+      </div>
+
+      <!-- Unit 2 -->
+      <div class="unit-card fade-in">
+        <div class="unit-number">02</div>
+        <div class="unit-tag">Unit 02</div>
+        <!-- Battery cells SVG icon -->
+        <svg class="unit-icon-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="10" width="8" height="28" rx="1" stroke="#00d4ff" stroke-width="1.5"/>
+          <rect x="2" y="10" width="8" height="20" rx="1" fill="rgba(0,212,255,0.3)"/>
+          <rect x="13" y="10" width="8" height="28" rx="1" stroke="#00d4ff" stroke-width="1.5"/>
+          <rect x="13" y="10" width="8" height="16" rx="1" fill="rgba(0,212,255,0.25)"/>
+          <rect x="24" y="10" width="8" height="28" rx="1" stroke="#00d4ff" stroke-width="1.5"/>
+          <rect x="24" y="10" width="8" height="24" rx="1" fill="rgba(0,212,255,0.35)"/>
+          <rect x="35" y="10" width="8" height="28" rx="1" stroke="#00d4ff" stroke-width="1.5"/>
+          <rect x="35" y="10" width="8" height="12" rx="1" fill="rgba(0,212,255,0.2)"/>
+          <line x1="10" y1="24" x2="13" y2="24" stroke="#00d4ff" stroke-width="1.5"/>
+          <line x1="21" y1="24" x2="24" y2="24" stroke="#00d4ff" stroke-width="1.5"/>
+          <line x1="32" y1="24" x2="35" y2="24" stroke="#00d4ff" stroke-width="1.5"/>
+          <line x1="2" y1="42" x2="43" y2="42" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+        </svg>
+        <div class="unit-title">電池管理<br>系統整合</div>
+        <p class="unit-desc">以電動賽車的電池組為場景，說明多節電芯的即時監控架構、均衡邏輯的設計思路，以及電池數據如何透過通訊協定整合進整車系統。這是 BMS 工程師每天面對的真實工作全貌。</p>
+      </div>
+
+      <!-- Unit 3 -->
+      <div class="unit-card fade-in">
+        <div class="unit-number">03</div>
+        <div class="unit-tag">Unit 03</div>
+        <!-- Safety circuit SVG icon -->
+        <svg class="unit-icon-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 4 L42 12 L42 24 C42 34 34 42 24 46 C14 42 6 34 6 24 L6 12 Z" stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.05)"/>
+          <path d="M16 24 L21 29 L32 18" stroke="#00d4ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="unit-title">安全電路的<br>實驗室驗證</div>
+        <p class="unit-desc">以賽車安全規範中的制動保護電路為案例——當煞車踩下但車輛仍在出力時，電路如何自動切斷高壓迴路？說明如何用量測工具在桌上模擬真實場景，完成原本需要整車才能進行的驗證。</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SCHEDULE ── -->
+<section class="schedule">
+  <div class="section-inner">
+    <div class="section-label">Schedule</div>
+    <h2>議程時間表</h2>
+
+    <div class="timeline fade-in">
+      <div class="timeline-item">
+        <div class="timeline-time">13:00 – 13:30</div>
+        <div>
+          <div class="timeline-content-title">報到</div>
+          <div class="timeline-content-desc">現場簽到，環境準備</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">13:30 – 15:00</div>
+        <div>
+          <div class="timeline-content-title">單元一｜電源設計與穩定度驗證</div>
+          <div class="timeline-content-desc">Buck Converter 原理與實作・波形量測・Bode Plot 穩定度分析</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">15:00 – 15:30</div>
+        <div>
+          <div class="timeline-content-title">單元二｜電池管理系統整合</div>
+          <div class="timeline-content-desc">LTC6813 架構展示・isoSPI 通訊・CAN 數據整合</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">15:30 – 16:00</div>
+        <div>
+          <div class="timeline-content-title">單元三｜安全電路的實驗室驗證</div>
+          <div class="timeline-content-desc">BSPD 電路設計邏輯・M2K 訊號模擬・電路反應觀察</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">16:00 – 17:00</div>
+        <div>
+          <div class="timeline-content-title">討論交流 & 應用構想分享</div>
+          <div class="timeline-content-desc">自由提問・應用場景討論・與講師交流</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── NOTICE ── -->
+<section id="register" class="notice">
+  <div class="section-inner">
+    <div class="section-label">Registration & Notice</div>
+    <h2>報名與注意事項</h2>
+
+    <div class="notice-grid fade-in">
+      <div class="notice-block">
+        <div class="notice-block-title">報名資訊</div>
+        <ul class="notice-list">
+          <li>本活動<strong style="color:var(--text)">免費參加</strong>，名額限 45 位，額滿即止</li>
+          <li>請點擊下方連結填寫報名表單完成報名<br><br>
+            <a href="#">▸ 點此前往報名表單</a>
+          </li>
+          <li>如報名後無法出席，請於活動前 3 天來信告知，以便將名額開放給候補者：<a href="mailto:istunetwork@gmail.com">istunetwork@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="notice-block">
+        <div class="notice-block-title">參加須知</div>
+        <ul class="notice-list">
+          <li>請自備<strong style="color:var(--text)"> Windows 筆記型電腦</strong>，活動中將有實作環節</li>
+          <li>請於活動前完成安裝 <strong style="color:var(--text)">Scopy</strong>（ADALM2000 配套軟體）<br>
+            <a href="https://github.com/analogdevicesinc/scopy/releases/tag/v1.5.0-rc1" target="_blank">▸ Scopy 下載頁面</a>
+          </li>
+          <li>報名參加即同意活動現場所拍攝之照片或影片，主辦單位得用於活動紀錄、成果報告及推廣宣傳使用</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ORGANIZERS ── -->
+<section class="organizers">
+  <div class="section-inner">
+    <div class="section-label">Organizers</div>
+    <h2>主辦與協辦單位</h2>
+
+    <div class="org-grid fade-in">
+      <div class="org-card">
+        <div class="org-abbr">ADI</div>
+        <div class="org-name">Analog Devices, Inc.</div>
+        <div class="org-desc">全球類比與混合訊號半導體領域領導廠商，產品廣泛應用於電動車、AI 伺服器等高要求場景</div>
+      </div>
+      <div class="org-card">
+        <div class="org-abbr">安馳科技</div>
+        <div class="org-name">Macnica Anstek</div>
+        <div class="org-desc">全球第四大半導體通路商日本Macnica成員之一，專業技術團隊、主攻工業應用利基型市場</div>
+      </div>
+	  <div class="org-card">
+        <div class="org-abbr">輔宏</div>
+        <div class="org-name">iStuNet</div>
+        <div class="org-desc">ADI在亞太區的授權校園代理商，長期深耕工程教育與技術推廣</div>
+      </div>
+      <div class="org-card">
+        <div class="org-abbr">IET</div>
+        <div class="org-name">The Institution of Engineering and Technology</div>
+        <div class="org-desc">全球最大工程技術專業組織之一，致力於工程知識分享與人才培育</div>
+      </div>
+   
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copyright">© 2026 Analog Devices, Inc. · Intelligent Sensing Workshop · All rights reserved.</span>
+    <span class="footer-copyright" style="margin-top:8px;">若有未盡事宜，主辦單位保留最終解釋與調整權。</span>
+  </div>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Stagger children of grids
+  document.querySelectorAll('.units-grid, .outcomes-grid, .org-grid, .industry-visual').forEach(grid => {
+    grid.querySelectorAll(':scope > *').forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.1}s`;
+    });
+  });
+</script>
+</body>
+</html>
